@@ -1,0 +1,3 @@
+- Created a server and listening on PORT 7777
+- Wrote request handlers for basic routes like /test and /hello
+- Installed nodemon for realtime server updates and updated scripts inside package.json.
