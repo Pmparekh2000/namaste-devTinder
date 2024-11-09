@@ -3,6 +3,8 @@ const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
 
+app.use(express.json());
+
 app.post("/signUp", async (req, res) => {
   const dummyUser = {
     firstName: "Vanshika123",
@@ -11,7 +13,9 @@ app.post("/signUp", async (req, res) => {
     gender: "F",
     password: "1597534682",
   };
-  const user = new User(dummyUser);
+  console.log("Request body obtained is", req.body);
+
+  const user = new User(req.body);
 
   try {
     await user.save();
