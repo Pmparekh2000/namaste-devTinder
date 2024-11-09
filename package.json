@@ -16,6 +16,7 @@
   "author": "Prerak",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.0"
+    "express": "^4.21.0",
+    "mongoose": "^8.8.1"
   }
 }
