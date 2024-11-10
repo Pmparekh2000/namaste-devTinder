@@ -5,6 +5,22 @@ const User = require("./models/user");
 
 app.use(express.json());
 
+// Get user(s) based on first name
+app.get("/users", async (req, res) => {
+  try {
+    const users = await User.findOne({});
+    console.log("Users obtained are", users);
+
+    if (users === null) {
+      res.status(404).send("User not found");
+    } else {
+      res.status(200).send(users);
+    }
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+});
+
 app.post("/signUp", async (req, res) => {
   const dummyUser = {
     firstName: "Vanshika123",
