@@ -17,7 +17,22 @@ app.get("/users", async (req, res) => {
       res.status(200).send(users);
     }
   } catch (err) {
-    res.status(400).send("Something went wrong");
+    res.status(500).send("Something went wrong");
+  }
+});
+
+app.delete("/users", async (req, res) => {
+  const userId = req.body.userId;
+  try {
+    const deletedUser = await User.findOneAndDelete({ _id: userId });
+    console.log("Deleted user is", deletedUser);
+    if (deletedUser) {
+      res.status(200).send("User deleted successfully");
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (err) {
+    res.status(500).send("Something went wrong while deleting");
   }
 });
 
@@ -37,7 +52,7 @@ app.post("/signUp", async (req, res) => {
     await user.save();
     res.status(200).send("User created successfully");
   } catch (error) {
-    res.status(400).send("User creation failed");
+    res.status(500).send("User creation failed");
   }
 });
 
