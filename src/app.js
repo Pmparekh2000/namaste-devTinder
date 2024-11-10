@@ -5,6 +5,32 @@ const User = require("./models/user");
 
 app.use(express.json());
 
+app.patch("/users", async (req, res) => {
+  const userId = req.body.userId;
+  const updatedFirstName = req.body.firstName;
+  console.log("Updated firstName is", updatedFirstName);
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        firstName: updatedFirstName,
+        lastName: "Updated Last Name",
+      },
+      { returnDocument: "after" }
+    );
+    console.log("updatedUser is", updatedUser);
+
+    if (updatedUser) {
+      res.status(200).send("Successfully updated user");
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (err) {
+    res.status(500).send("Something went wrong on server");
+  }
+});
+
 // Get user(s) based on first name
 app.get("/users", async (req, res) => {
   try {
