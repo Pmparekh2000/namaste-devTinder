@@ -16,8 +16,10 @@ app.patch("/users", async (req, res) => {
       {
         firstName: updatedFirstName,
         lastName: "Updated Last Name",
+        gender: req.body.gender,
+        skills: req.body.skills,
       },
-      { returnDocument: "after" }
+      { returnDocument: "after", runValidators: true }
     );
     console.log("updatedUser is", updatedUser);
 
@@ -27,7 +29,7 @@ app.patch("/users", async (req, res) => {
       res.status(404).send("User not found");
     }
   } catch (err) {
-    res.status(500).send("Something went wrong on server");
+    res.status(500).send(err);
   }
 });
 
@@ -78,7 +80,7 @@ app.post("/signUp", async (req, res) => {
     await user.save();
     res.status(200).send("User created successfully");
   } catch (error) {
-    res.status(500).send("User creation failed");
+    res.status(500).send(error);
   }
 });
 
