@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const userSchema = mongoose.Schema(
   {
@@ -17,6 +18,11 @@ const userSchema = mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Invalid email address", value);
+        }
+      },
     },
     age: {
       type: Number,
@@ -38,6 +44,11 @@ const userSchema = mongoose.Schema(
       type: String,
       default:
         "https://tse1.mm.bing.net/th?id=OIP.gqimwo2-nMorBg2hjiHvjwAAAA&pid=Api&P=0&h=180",
+      validate(value) {
+        if (!validator.isURL(value)) {
+          throw new Error("Invalid photo URL");
+        }
+      },
     },
     about: {
       type: String,
