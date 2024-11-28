@@ -2,6 +2,8 @@ const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
@@ -84,22 +86,38 @@ app.delete("/users", async (req, res) => {
 });
 
 app.post("/signUp", async (req, res) => {
-  const dummyUser = {
-    firstName: "Vanshika123",
-    lastName: "Dhruv123",
-    age: 20,
-    gender: "F",
-    password: "1597534682",
-  };
-  console.log("Request body obtained is", req.body);
-
-  const user = new User(req.body);
-
+  // const dummyUser = {
+  //   firstName: "Vanshika123",
+  //   lastName: "Dhruv123",
+  //   age: 20,
+  //   gender: "F",
+  //   password: "1597534682",
+  // };
   try {
+    // Step - 1 Validation of data
+
+    validateSignUpData(req);
+
+    // Step - 2 Encrypt the password
+
+    const { firstName, lastName, emailId, password } = req.body;
+    const passwordHash = await bcrypt.hash(password, 10);
+    console.log(passwordHash);
+
+    // Step - 3 Store the user into the database
+    console.log("Request body obtained is", req.body);
+
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
+    });
+
     await user.save();
     res.status(200).send("User created successfully");
   } catch (error) {
-    res.status(500).send(error);
+    res.status(400).send("ERROR: " + error.message);
   }
 });
 
