@@ -121,6 +121,25 @@ app.post("/signUp", async (req, res) => {
   }
 });
 
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ emailId: email });
+    if (!user) {
+      throw new Error("Invalid credentials");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (isPasswordValid) {
+      res.status(200).send("Login Successful!!!");
+    } else {
+      res.status(400).send("Invalid credentials");
+    }
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
 connectDB()
   .then(() => {
     console.log("Connected successfully to MongoDB Atlas");
