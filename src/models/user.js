@@ -75,8 +75,7 @@ userSchema.methods.getJWT = async function () {
   const user = this;
   const token = await jwt.sign(
     { _id: user._id, name: user.firstName },
-    "DEV@Tinder$790",
-    { expiresIn: 10 }
+    "DEV@Tinder$790"
   );
   return token;
 };
